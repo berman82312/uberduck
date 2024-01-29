@@ -33,7 +33,8 @@
         "nyholm/psr7": "^1.8@dev",
         "guzzlehttp/guzzle": "^7.0",
         "illuminate/support": "^11.0@dev",
-        "php-http/mock-client": "1.x-dev"
+        "php-http/mock-client": "1.x-dev",
+        "orchestra/testbench": "9.x-dev"
     },
     "config": {
         "allow-plugins": {

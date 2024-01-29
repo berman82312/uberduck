@@ -2,5 +2,7 @@
 /.idea
 composer.lock
 .env
+.env.testing
 .phpunit.result.cache
 .phpunit.cache
+/workbench
