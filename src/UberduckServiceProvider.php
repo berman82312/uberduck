@@ -4,7 +4,7 @@ namespace littlefish\Uberduck;
 
 use Illuminate\Support\ServiceProvider;
 
-class CometChatServiceProvider extends ServiceProvider
+class UberduckServiceProvider extends ServiceProvider
 {
     public function register()
     {

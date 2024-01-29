@@ -1,15 +1,18 @@
 {
     "name": "littlefish/uberduck",
     "description": "Uberduck's Rest API for PHP",
+    "version": "0.0.1",
     "type": "library",
-    "require-dev": {
-        "phpunit/phpunit": "11.0.x-dev",
-        "nyholm/psr7": "^1.8@dev",
-        "guzzlehttp/guzzle": "^7.0",
-        "illuminate/support": "^11.0@dev",
-        "php-http/mock-client": "1.x-dev"
-    },
     "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "role": "developer",
+            "name": "littlefish",
+            "email": "berman82312@gmail.com",
+            "homepage": "https://fish.craft.me/me"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "littlefish\\Uberduck\\": "src/"
@@ -20,17 +23,17 @@
             "littlefish\\Uberduck\\": "tests/"
         }
     },
-    "authors": [
-        {
-            "name": "littlefish",
-            "email": "berman82312@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
     "require": {
         "psr/http-client-implementation": "*",
         "php-http/discovery": "^1.19",
         "symfony/http-client": "7.1.x-dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "11.0.x-dev",
+        "nyholm/psr7": "^1.8@dev",
+        "guzzlehttp/guzzle": "^7.0",
+        "illuminate/support": "^11.0@dev",
+        "php-http/mock-client": "1.x-dev"
     },
     "config": {
         "allow-plugins": {
@@ -43,5 +46,10 @@
                 "littlefish\\Uberduck\\UberduckServiceProvider"
             ]
         }
-    }
+    },
+    "keywords": [
+        "Uberduck",
+        "Uberduck API"
+    ],
+    "homepage": "https://github.com/berman82312/uberduck"
 }
