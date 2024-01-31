@@ -2,7 +2,6 @@
 
 namespace littlefish\Uberduck\laravel;
 
-use Illuminate\Support\Facades\Http;
 use littlefish\Uberduck\Uberduck;
 use littlefish\Uberduck\UberduckServiceProvider;
 use Orchestra\Testbench\TestCase;
