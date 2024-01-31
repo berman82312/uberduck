@@ -1,2 +1,2 @@
 # uberduck
-Uberduck's Rest API for PHP
+Uberduck's Rest API for PHP. For the full document on the Uberduck's API, please refer to the [official document](https://docs.uberduck.ai/reference).
