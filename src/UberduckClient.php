@@ -2,13 +2,9 @@
 
 namespace littlefish\Uberduck;
 
-use Http\Client\Common\Plugin\AuthenticationPlugin;
-use Http\Client\Common\Plugin\ContentTypePlugin;
-use Http\Client\Common\PluginClient;
 use Http\Client\Exception\HttpException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
-use Http\Message\Authentication\BasicAuth;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -17,6 +13,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 class UberduckClient
 {
     protected string $host;
+    protected string $auth;
     protected ClientInterface $client;
     protected RequestFactoryInterface $requestFactory;
     protected StreamFactoryInterface $streamFactory;
@@ -26,15 +23,11 @@ class UberduckClient
         $this->host = $config['api_host'];
         $this->client = $client ?? Psr18ClientDiscovery::find();
 
-        $authentication = new BasicAuth($config['api_key'], $config['api_secret']);
-        $authenticationPlugin = new AuthenticationPlugin($authentication);
-        $contentTypePlugin = new ContentTypePlugin();
+        $this->auth = base64_encode($config['api_key'] . ':' . $config['api_secret']);
 
         $this->requestFactory = Psr17FactoryDiscovery::findRequestFactory();
 
         $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-
-        $this->client = new PluginClient($this->client, [$authenticationPlugin, $contentTypePlugin]);
     }
 
     protected function makeUrl(string $path)
@@ -72,6 +65,9 @@ class UberduckClient
 
     protected function sendRequest(RequestInterface $request)
     {
+        $request = $request->withHeader('Authorization', 'Basic ' . $this->auth)
+            ->withHeader('content-type', 'application/json');
+
         $response = $this->client->sendRequest($request);
 
         $body = $response->getBody();
