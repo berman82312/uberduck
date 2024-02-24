@@ -55,4 +55,13 @@ class Uberduck
 
         return $response;
     }
+
+    public function customPrompt(string $key, array $payload = [])
+    {
+        $url = 'templates/deployments/' . $key . '/generate';
+
+        $response = $this->client->post($url, ['variables' => $payload]);
+
+        return $response;
+    }
 }

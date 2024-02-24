@@ -234,7 +234,110 @@ class UberduckTests extends TestCase
 
         $url = 'https://api.uberduck.ai/voices/639f5a27-edbc-444f-bfe9-c7b62aa014f8/samples';
 
+        $headers = $request->getHeaders();
+
+        $auth = base64_encode('testing_key:testing_secret');
+
         $this->assertEquals($url, $request->getUri()->__toString());
+        $this->assertArrayHasKey('Authorization', $headers);
+        $this->assertEquals('Basic ' . $auth, $headers['Authorization'][0]);
         $this->assertEquals(2, count($result));
+    }
+
+    public function testCustomPrompt(): void
+    {
+        $testResponse = json_encode([
+            "choices" => [
+                [
+                    "finish_reason" => "stop",
+                    "index" => 0,
+                    "logprobs" => null,
+                    "message" => [
+                        "content" => "俺の心は燃えてる　夢を追いかけて\n日々の戦い　立ち向かって\n街中を駆け抜ける　俺のスタイル\n誰も止められない　この炎のような情熱\n\n時には苦しい　時には辛い\nでも俺は立ち止まらない　前だけ見て\n夢を叶えるために　全力で走る\nこの街の王になる　その日まで\n\n誰もが俺の名前を知るだろう\n俺の音楽が響く　どこまでも\n日本中を揺るがす　俺のメロディ\nこれが俺の物語　誰にも邪魔させない\n\n俺の血は熱い　俺の魂は強い\nこのリリックが刻む　俺の遺産\n日本の誇りを背負って　進む\n俺のラップが変える　未来を見せる",
+                        "role" => "assistant",
+                        "function_call" => null,
+                        "tool_calls" => null
+                    ]
+                ]
+            ],
+            "created" => 1708759229,
+            "id" => "test",
+            "model" => "gpt-35-turbo",
+            "object" => "chat.completion",
+            "usage" => [
+                "completion_tokens" => 296,
+                "prompt_tokens" => 45,
+                "total_tokens" => 341
+            ]
+        ]);
+        $this->responseMock->append(new Response(200, ['Content-Type' => 'application/json'], $testResponse));
+        $result = $this->uberduck->customPrompt('japanese-lyrics');
+
+        $this->assertEquals(1, count($this->requestHistory));
+
+        $transaction = $this->requestHistory[0];
+        $request = $transaction['request'];
+
+        $url = 'https://api.uberduck.ai/templates/deployments/japanese-lyrics/generate';
+
+        $headers = $request->getHeaders();
+        $requestBody = (string) $request->getBody();
+
+        $auth = base64_encode('testing_key:testing_secret');
+
+        $this->assertEquals($url, $request->getUri()->__toString());
+        $this->assertArrayHasKey('Authorization', $headers);
+        $this->assertEquals('Basic ' . $auth, $headers['Authorization'][0]);
+        $this->assertEmpty(json_decode($requestBody));
+    }
+
+    public function testCustomPromptWithVariables(): void
+    {
+        $testResponse = json_encode([
+            "choices" => [
+                [
+                    "finish_reason" => "stop",
+                    "index" => 0,
+                    "logprobs" => null,
+                    "message" => [
+                        "content" => "俺の心は燃えてる　夢を追いかけて\n日々の戦い　立ち向かって\n街中を駆け抜ける　俺のスタイル\n誰も止められない　この炎のような情熱\n\n時には苦しい　時には辛い\nでも俺は立ち止まらない　前だけ見て\n夢を叶えるために　全力で走る\nこの街の王になる　その日まで\n\n誰もが俺の名前を知るだろう\n俺の音楽が響く　どこまでも\n日本中を揺るがす　俺のメロディ\nこれが俺の物語　誰にも邪魔させない\n\n俺の血は熱い　俺の魂は強い\nこのリリックが刻む　俺の遺産\n日本の誇りを背負って　進む\n俺のラップが変える　未来を見せる",
+                        "role" => "assistant",
+                        "function_call" => null,
+                        "tool_calls" => null
+                    ]
+                ]
+            ],
+            "created" => 1708759229,
+            "id" => "test",
+            "model" => "gpt-35-turbo",
+            "object" => "chat.completion",
+            "usage" => [
+                "completion_tokens" => 296,
+                "prompt_tokens" => 45,
+                "total_tokens" => 341
+            ]
+        ]);
+        $this->responseMock->append(new Response(200, ['Content-Type' => 'application/json'], $testResponse));
+        $result = $this->uberduck->customPrompt('japanese-lyrics', ['lyrics' => 'japanese']);
+
+        $this->assertEquals(1, count($this->requestHistory));
+
+        $transaction = $this->requestHistory[0];
+        $request = $transaction['request'];
+
+        $url = 'https://api.uberduck.ai/templates/deployments/japanese-lyrics/generate';
+
+        $headers = $request->getHeaders();
+        $requestBody = (string) $request->getBody();
+        $body = json_decode($requestBody);
+
+        $auth = base64_encode('testing_key:testing_secret');
+
+        $this->assertEquals($url, $request->getUri()->__toString());
+        $this->assertArrayHasKey('Authorization', $headers);
+        $this->assertEquals('Basic ' . $auth, $headers['Authorization'][0]);
+        $this->assertObjectHasProperty('variables', $body);
+        $this->assertObjectHasProperty('lyrics', $body->variables);
+        $this->assertEquals('japanese', $body->variables->lyrics);
     }
 }
