@@ -21,9 +21,9 @@ class UberduckClient
     public function __construct(private readonly array $config, ?ClientInterface $client = null)
     {
         $this->host = $config['api_host'];
-        $this->client = $client ?? Psr18ClientDiscovery::find();
-
         $this->auth = base64_encode($config['api_key'] . ':' . $config['api_secret']);
+
+        $this->client = $client ?? Psr18ClientDiscovery::find();
 
         $this->requestFactory = Psr17FactoryDiscovery::findRequestFactory();
 

@@ -11,7 +11,7 @@
          failOnWarning="true">
     <testsuites>
         <testsuite name="default">
-            <directory>tests</directory>
+            <directory suffix="Tests.php">tests</directory>
         </testsuite>
     </testsuites>
 
@@ -20,4 +20,9 @@
             <directory>src</directory>
         </include>
     </source>
+
+    <php>
+        <env name="UBERDUCK_KEY" value="testing_key" />
+        <env name="UBERDUCK_SECRET" value="testing_secret" />
+    </php>
 </phpunit>
