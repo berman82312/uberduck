@@ -7,6 +7,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
+use Http\Client\Exception\HttpException;
 use PHPUnit\Framework\TestCase;
 
 class UberduckTests extends TestCase
@@ -339,5 +340,12 @@ class UberduckTests extends TestCase
         $this->assertObjectHasProperty('variables', $body);
         $this->assertObjectHasProperty('lyrics', $body->variables);
         $this->assertEquals('japanese', $body->variables->lyrics);
+    }
+
+    public function testRequestFailed(): void
+    {
+        $this->expectException(HttpException::class);
+        $this->responseMock->append(new Response(500));
+        $this->uberduck->customPrompt('japanese-lyrics', ['lyrics' => 'japanese']);
     }
 }
