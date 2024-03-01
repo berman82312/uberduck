@@ -1,6 +1,6 @@
 
-[![Latest Version](https://img.shields.io/packagist/v/littlefish/uberduck)](https://github.com/littlefish/uberduck)
-[![Total downloads](https://img.shields.io/packagist/dt/littlefish/uberduck)](https://github.com/littlefish/uberduck)
+[![Latest Version](https://img.shields.io/packagist/v/littlefish/uberduck)](https://github.com/berman82312/uberduck)
+[![Total downloads](https://img.shields.io/packagist/dt/littlefish/uberduck)](https://github.com/berman82312/uberduck)
 
 
 # uberduck
