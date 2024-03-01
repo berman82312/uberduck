@@ -2,13 +2,14 @@
 
 namespace littlefish\Uberduck;
 
-use Http\Client\Exception\HttpException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Http\Client\Common\PluginClient;
+use Http\Client\Common\Plugin\ErrorPlugin;
 
 class UberduckClient
 {
@@ -23,7 +24,10 @@ class UberduckClient
         $this->host = $config['api_host'];
         $this->auth = base64_encode($config['api_key'] . ':' . $config['api_secret']);
 
-        $this->client = $client ?? Psr18ClientDiscovery::find();
+        $this->client = new PluginClient(
+            $client ?? Psr18ClientDiscovery::find(),
+            [new ErrorPlugin()]
+        );
 
         $this->requestFactory = Psr17FactoryDiscovery::findRequestFactory();
 
@@ -73,10 +77,6 @@ class UberduckClient
         $body = $response->getBody();
 
         $result = json_decode((string) $body, true, 512, JSON_THROW_ON_ERROR);
-
-        if ($response->getStatusCode() !== 200) {
-            throw new HttpException($result['error']['message'], $request, $response);
-        }
 
         return $result;
     }
